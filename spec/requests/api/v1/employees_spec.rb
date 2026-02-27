@@ -38,4 +38,16 @@ RSpec.describe "Employees API", type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
+
+  # INDEX (GET /api/v1/employees)
+  describe "GET /api/v1/employees" do
+    let!(:employees) { create_list(:employee, 2) }
+
+    it "returns a list of all employees" do
+      get "/api/v1/employees"
+
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body).size).to eq(2)
+    end
+  end
 end
