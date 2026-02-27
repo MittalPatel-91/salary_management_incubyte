@@ -50,4 +50,23 @@ RSpec.describe "Employees API", type: :request do
       expect(JSON.parse(response.body).size).to eq(2)
     end
   end
+
+  # SHOW (GET /api/v1/employees/:id)
+  describe "GET /api/v1/employees/:id" do
+    let!(:employee) { create(:employee) }
+
+    it "returns the employee" do
+      get "/api/v1/employees/#{employee.id}"
+
+      expect(response).to have_http_status(:ok)
+
+      body = JSON.parse(response.body)
+
+      expect(body["id"]).to eq(employee.id)
+      expect(body["full_name"]).to eq(employee.full_name)
+      expect(body["job_title"]).to eq(employee.job_title)
+      expect(body["country"]).to eq(employee.country)
+      expect(body["salary"]).to eq(employee.salary)
+    end
+  end
 end
