@@ -8,6 +8,11 @@ class Api::V1::EmployeesController < ApplicationController
     end
   end
 
+  def index
+    employees = Employee.all
+    render json: employees, status: :ok
+  end
+
   private
 
   def employee_params
