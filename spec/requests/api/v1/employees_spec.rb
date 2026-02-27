@@ -13,6 +13,16 @@ RSpec.describe "Employees API", type: :request do
         }
       }
     end
+    let(:invalid_params) do
+      {
+        employee: {
+          full_name: nil,
+          job_title: "Developer",
+          country: "India",
+          salary: 50000
+        }
+      }
+    end
 
     it "creates an employee" do
       expect {
@@ -20,6 +30,12 @@ RSpec.describe "Employees API", type: :request do
       }.to change(Employee, :count).by(1)
 
       expect(response).to have_http_status(:created)
+    end
+
+    it "returns errors for invalid params" do
+      post "/api/v1/employees", params: invalid_params
+
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 end
