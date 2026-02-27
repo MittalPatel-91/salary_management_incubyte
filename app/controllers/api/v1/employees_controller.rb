@@ -1,7 +1,11 @@
 class Api::V1::EmployeesController < ApplicationController
   def create
-    employee = Employee.create!(employee_params)
-    render json: employee, status: :created
+    employee = Employee.new(employee_params)
+    if employee.save
+      render json: employee, status: :created
+    else
+      render json: { errors: employee.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   private
