@@ -68,5 +68,13 @@ RSpec.describe "Employees API", type: :request do
       expect(body["country"]).to eq(employee.country)
       expect(body["salary"]).to eq(employee.salary)
     end
+
+    it "returns record not found for non-existent employee" do
+      get "/api/v1/employees/9999"
+
+      expect(response).to have_http_status(:not_found)
+      body = JSON.parse(response.body)
+      expect(body["error"]).to eq("Employee not found")
+    end
   end
 end
