@@ -3,11 +3,33 @@ require "rails_helper"
 RSpec.describe "Salary Metrics API", type: :request do
   # SALARY METRICS BY COUNTRY (GET /api/v1/salary_metrics/country)
   describe "GET /api/v1/salary_metrics/country" do
-    let!(:emp1) { create(:employee, country: "India", salary: 100000) }
-    let!(:emp2) { create(:employee, country: "India", salary: 200000) }
-
     context "when employees exist for the country" do
+      before do
+        create(:employee, country: "India", salary: 100000)
+        create(:employee, country: "India", salary: 200000)
+      end
+
       it "returns min, max and average salary for the country" do
+        get "/api/v1/salary_metrics/country", params: { country: "India" }
+
+        expect(response).to have_http_status(:ok)
+
+        body = JSON.parse(response.body)
+
+        expect(body["minimum_salary"]).to eq(100000)
+        expect(body["maximum_salary"]).to eq(200000)
+        expect(body["average_salary"]).to eq(150000)
+      end
+    end
+
+    context "when employees exist for multiple countries" do
+      before do
+        create(:employee, country: "India", salary: 100000)
+        create(:employee, country: "India", salary: 200000)
+        create(:employee, country: "United States", salary: 500000)
+      end
+
+      it "only calculates metrics for the requested country" do
         get "/api/v1/salary_metrics/country", params: { country: "India" }
 
         expect(response).to have_http_status(:ok)
@@ -48,11 +70,31 @@ RSpec.describe "Salary Metrics API", type: :request do
 
   # SALARY METRICS BY JOB TITLE (GET /api/v1/salary_metrics/job_title)
   describe "GET /api/v1/salary_metrics/job_title" do
-    let!(:emp1) { create(:employee, job_title: "Developer", salary: 100000) }
-    let!(:emp2) { create(:employee, job_title: "Developer", salary: 200000) }
-
     context "when employees exist for the job title" do
+      before do
+        create(:employee, job_title: "Developer", salary: 100000)
+        create(:employee, job_title: "Developer", salary: 200000)
+      end
+
       it "returns average salary for job title" do
+        get "/api/v1/salary_metrics/job_title", params: { job_title: "Developer" }
+
+        expect(response).to have_http_status(:ok)
+
+        body = JSON.parse(response.body)
+
+        expect(body["average_salary"]).to eq(150000)
+      end
+    end
+
+    context "when employees exist for multiple job titles" do
+      before do
+        create(:employee, job_title: "Developer", salary: 100000)
+        create(:employee, job_title: "Developer", salary: 200000)
+        create(:employee, job_title: "Manager", salary: 500000)
+      end
+
+      it "only calculates metrics for the requested job title" do
         get "/api/v1/salary_metrics/job_title", params: { job_title: "Developer" }
 
         expect(response).to have_http_status(:ok)
