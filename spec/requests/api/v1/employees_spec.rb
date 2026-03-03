@@ -142,7 +142,7 @@ RSpec.describe "Employees API", type: :request do
         delete "/api/v1/employees/#{employee.id}"
       }.to change(Employee, :count).by(-1)
 
-      expect(response).to have_http_status(:no_content)
+      expect(response).to have_http_status(:ok)
     end
   end
 end

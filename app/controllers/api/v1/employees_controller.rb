@@ -1,5 +1,5 @@
 class Api::V1::EmployeesController < ApplicationController
-  before_action :set_employee, only: [ :show, :update ]
+  before_action :set_employee, only: [ :show, :update, :destroy ]
 
   def create
     employee = Employee.new(employee_params)
@@ -30,6 +30,15 @@ class Api::V1::EmployeesController < ApplicationController
       else
         render json: { errors: @employee.errors.full_messages }, status: :unprocessable_entity
       end
+    else
+      render json: { error: "Employee not found" }, status: :not_found
+    end
+  end
+
+  def destroy
+    if @employee
+      @employee.destroy
+      render json: { message: "Employee deleted successfully" }, status: :ok
     else
       render json: { error: "Employee not found" }, status: :not_found
     end
