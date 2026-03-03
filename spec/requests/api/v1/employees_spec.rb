@@ -77,4 +77,26 @@ RSpec.describe "Employees API", type: :request do
       expect(body["error"]).to eq("Employee not found")
     end
   end
+
+  # UPDATE (PATCH /api/v1/employees/:id)
+  describe "PATCH /api/v1/employees/:id" do
+    let!(:employee) { create(:employee, full_name: "Old Name") }
+
+    let(:valid_params) do
+      {
+        employee: {
+          full_name: "New Name"
+        }
+      }
+    end
+
+    it "updates the employee record" do
+      patch "/api/v1/employees/#{employee.id}", params: valid_params
+
+      expect(response).to have_http_status(:ok)
+
+      employee.reload
+      expect(employee.full_name).to eq("New Name")
+    end
+  end
 end
