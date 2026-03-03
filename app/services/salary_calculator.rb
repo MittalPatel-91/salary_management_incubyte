@@ -9,7 +9,7 @@ class SalaryCalculator
   end
 
   def call
-    gross = @employee.salary
+    gross = @employee.salary.to_f
     tds_amount = calculate_tds(gross)
 
     {
@@ -24,11 +24,11 @@ class SalaryCalculator
   def calculate_tds(gross)
     case @employee.country
     when IND
-      gross * INDIA_TDS_RATE
+      (gross * INDIA_TDS_RATE).to_f
     when US
-      gross * US_TDS_RATE
+      (gross * US_TDS_RATE).to_f
     else
-      0
+      0.0
     end
   end
 end

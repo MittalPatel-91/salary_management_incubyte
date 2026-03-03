@@ -1,5 +1,5 @@
 class Api::V1::EmployeesController < ApplicationController
-  before_action :set_employee, only: [ :show, :update, :destroy ]
+  before_action :set_employee, only: [ :show, :update, :destroy, :calculate_salary ]
 
   def create
     employee = Employee.new(employee_params)
@@ -30,6 +30,11 @@ class Api::V1::EmployeesController < ApplicationController
   def destroy
     @employee.destroy
     render json: { message: "Employee deleted successfully" }, status: :ok
+  end
+
+  def calculate_salary
+    result = SalaryCalculator.new(@employee).call
+    render json: result, status: :ok
   end
 
   private
