@@ -1,5 +1,5 @@
 class Api::V1::EmployeesController < ApplicationController
-  before_action :set_employee, only: [ :update ]
+  before_action :set_employee, only: [ :show, :update ]
 
   def create
     employee = Employee.new(employee_params)
@@ -16,9 +16,8 @@ class Api::V1::EmployeesController < ApplicationController
   end
 
   def show
-    @employee = Employee.find_by(id: params[:id])
     if @employee
-      render json: @employee
+      render json: @employee, status: :ok
     else
       render json: { error: "Employee not found" }, status: :not_found
     end
