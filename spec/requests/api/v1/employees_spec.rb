@@ -153,4 +153,21 @@ RSpec.describe "Employees API", type: :request do
       expect(body["error"]).to eq("Employee not found")
     end
   end
+
+  # SALARY BREAKDOWN (GET /api/v1/employees/:id/salary)
+  describe "GET /api/v1/employees/:id/calculate_salary" do
+    let!(:employee) { create(:employee, country: "India", salary: 100000) }
+
+    it "returns salary breakdown" do
+      get "/api/v1/employees/#{employee.id}/calculate_salary"
+
+      expect(response).to have_http_status(:ok)
+
+      body = JSON.parse(response.body)
+
+      expect(body["gross_salary"]).to eq(100000)
+      expect(body["tds"]).to eq(10000)
+      expect(body["net_salary"]).to eq(90000)
+    end
+  end
 end
