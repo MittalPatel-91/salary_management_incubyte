@@ -144,5 +144,13 @@ RSpec.describe "Employees API", type: :request do
 
       expect(response).to have_http_status(:ok)
     end
+
+    it "returns record not found for non-existent employee" do
+      delete "/api/v1/employees/9999"
+
+      expect(response).to have_http_status(:not_found)
+      body = JSON.parse(response.body)
+      expect(body["error"]).to eq("Employee not found")
+    end
   end
 end
