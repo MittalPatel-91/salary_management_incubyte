@@ -10,11 +10,14 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      # employee routes
       resources :employees do
         member do
           get "calculate_salary"
         end
       end
+      # salary metrics routes
+      get "salary_metrics/country", to: "salary_metrics#country"
     end
   end
 end
