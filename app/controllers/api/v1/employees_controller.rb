@@ -16,32 +16,20 @@ class Api::V1::EmployeesController < ApplicationController
   end
 
   def show
-    if @employee
-      render json: @employee, status: :ok
-    else
-      render json: { error: "Employee not found" }, status: :not_found
-    end
+    render json: @employee, status: :ok
   end
 
   def update
-    if @employee
-      if @employee.update(employee_params)
-        render json: @employee, status: :ok
-      else
-        render json: { errors: @employee.errors.full_messages }, status: :unprocessable_entity
-      end
+    if @employee.update(employee_params)
+      render json: @employee, status: :ok
     else
-      render json: { error: "Employee not found" }, status: :not_found
+      render json: { errors: @employee.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if @employee
-      @employee.destroy
-      render json: { message: "Employee deleted successfully" }, status: :ok
-    else
-      render json: { error: "Employee not found" }, status: :not_found
-    end
+    @employee.destroy
+    render json: { message: "Employee deleted successfully" }, status: :ok
   end
 
   private
@@ -51,6 +39,6 @@ class Api::V1::EmployeesController < ApplicationController
   end
 
   def set_employee
-    @employee = Employee.find_by(id: params[:id])
+    @employee = Employee.find(params[:id])
   end
 end
