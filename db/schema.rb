@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_27_074002) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_03_144453) do
   create_table "employees", force: :cascade do |t|
     t.string "country", null: false
     t.datetime "created_at", null: false
@@ -18,5 +18,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_27_074002) do
     t.string "job_title", null: false
     t.decimal "salary", precision: 15, scale: 2, null: false
     t.datetime "updated_at", null: false
+    t.index ["country"], name: "index_employees_on_country"
+    t.index ["job_title"], name: "index_employees_on_job_title"
   end
 end
