@@ -132,4 +132,17 @@ RSpec.describe "Employees API", type: :request do
       end
     end
   end
+
+  # DELETE (DELETE /api/v1/employees/:id)
+  describe "DELETE /api/v1/employees/:id" do
+    let!(:employee) { create(:employee) }
+
+    it "deletes the employee" do
+      expect {
+        delete "/api/v1/employees/#{employee.id}"
+      }.to change(Employee, :count).by(-1)
+
+      expect(response).to have_http_status(:no_content)
+    end
+  end
 end
