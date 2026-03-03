@@ -82,21 +82,54 @@ RSpec.describe "Employees API", type: :request do
   describe "PATCH /api/v1/employees/:id" do
     let!(:employee) { create(:employee, full_name: "Old Name") }
 
-    let(:valid_params) do
-      {
-        employee: {
-          full_name: "New Name"
+    context "with valid params" do
+      let(:valid_params) do
+        {
+          employee: {
+            full_name: "New Name"
+          }
         }
-      }
+      end
+
+      it "updates the employee record" do
+        patch "/api/v1/employees/#{employee.id}", params: valid_params
+
+        expect(response).to have_http_status(:ok)
+
+        employee.reload
+        expect(employee.full_name).to eq("New Name")
+      end
     end
 
-    it "updates the employee record" do
-      patch "/api/v1/employees/#{employee.id}", params: valid_params
+    context "with invalid params" do
+      let(:invalid_params) do
+        {
+          employee: {
+            full_name: ""
+          }
+        }
+      end
 
-      expect(response).to have_http_status(:ok)
+      it "returns validation errors" do
+        patch "/api/v1/employees/#{employee.id}", params: invalid_params
 
-      employee.reload
-      expect(employee.full_name).to eq("New Name")
+        body = JSON.parse(response.body)
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(body["errors"]).to include("Full name can't be blank")
+
+        employee.reload
+        expect(employee.full_name).to eq("Old Name")
+      end
+    end
+
+    context "when employee does not exist" do
+      it "returns record not found" do
+        patch "/api/v1/employees/9999", params: { employee: { full_name: "New Name" } }
+
+        expect(response).to have_http_status(:not_found)
+        body = JSON.parse(response.body)
+        expect(body["error"]).to eq("Employee not found")
+      end
     end
   end
 end
