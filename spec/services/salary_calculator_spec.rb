@@ -24,4 +24,14 @@ RSpec.describe SalaryCalculator do
       expect(subject[:net_salary]).to eq(88000)
     end
   end
+
+  context "when country is other" do
+    let(:country) { "Netherlands" }
+
+    it "calculates 0% TDS" do
+      expect(subject[:gross_salary]).to eq(100000)
+      expect(subject[:tds]).to eq(0)
+      expect(subject[:net_salary]).to eq(100000)
+    end
+  end
 end
