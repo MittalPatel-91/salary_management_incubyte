@@ -154,7 +154,7 @@ RSpec.describe "Employees API", type: :request do
     end
   end
 
-  # SALARY BREAKDOWN (GET /api/v1/employees/:id/salary)
+  # SALARY CALCULATION (GET /api/v1/employees/:id/calculate_salary)
   describe "GET /api/v1/employees/:id/calculate_salary" do
     let!(:employee) { create(:employee, country: "India", salary: 100000) }
 
