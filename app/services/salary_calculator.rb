@@ -1,8 +1,8 @@
 class SalaryCalculator
-  INDIA_TDS_RATE = 0.10
-  US_TDS_RATE = 0.12
-  IND = "India"
-  US = "United States"
+  DEDUCTION_RATES = {
+    "India" => 0.10,
+    "United States" => 0.12
+  }.freeze
 
   def initialize(employee)
     @employee = employee
@@ -10,25 +10,15 @@ class SalaryCalculator
 
   def call
     gross = @employee.salary.to_f
-    tds_amount = calculate_tds(gross)
+    rate  = DEDUCTION_RATES.fetch(@employee.country, 0.0)
+
+    tds_amount = (gross * rate).round(2)
+    net_salary = (gross - tds_amount).round(2)
 
     {
       gross_salary: gross,
       tds: tds_amount,
-      net_salary: gross - tds_amount
+      net_salary: net_salary
     }
-  end
-
-  private
-
-  def calculate_tds(gross)
-    case @employee.country
-    when IND
-      (gross * INDIA_TDS_RATE).to_f
-    when US
-      (gross * US_TDS_RATE).to_f
-    else
-      0.0
-    end
   end
 end
