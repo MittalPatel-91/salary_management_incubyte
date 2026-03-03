@@ -12,4 +12,12 @@ class SalaryMetricsQuery
       average_salary: scoped.average(:salary)&.to_f
     }
   end
+
+  def by_job_title(job_title)
+    scoped = @relation.where(job_title: job_title)
+
+    {
+      average_salary: scoped.average(:salary)&.to_f
+    }
+  end
 end

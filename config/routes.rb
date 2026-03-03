@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       end
       # salary metrics routes
       get "salary_metrics/country", to: "salary_metrics#country"
+      get "salary_metrics/job_title", to: "salary_metrics#job_title"
     end
   end
 end
