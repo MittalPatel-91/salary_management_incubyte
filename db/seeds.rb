@@ -7,3 +7,24 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+Employee.create!([
+  {
+    full_name: "John Doe",
+    job_title: "Developer",
+    country: "India",
+    salary: 100000
+  },
+  {
+    full_name: "Jane Smith",
+    job_title: "Developer",
+    country: "United States",
+    salary: 120000
+  },
+  {
+    full_name: "Carlos Lopez",
+    job_title: "Manager",
+    country: "Spain",
+    salary: 90000
+  }
+])
