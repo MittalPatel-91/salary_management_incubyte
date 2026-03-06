@@ -207,9 +207,11 @@ Test coverage includes:
 
 ## Implementation Details
 
-AI assistance (ChatGPT) was used during development as a supporting tool for architectural guidance, test strategy discussions, and documentation refinement. 
+AI assistance (ChatGPT) was used as a productivity tool during development to support architectural decisions, test design, and documentation refinement.
 
-The core implementation, API design, business logic, and test cases were written and validated manually. AI was primarily used as a reference tool to review best practices in Rails (such as service/query object patterns, RSpec structuring, and README formatting) and to improve clarity and maintainability of the project.
+It helped in exploring Rails best practices such as using service objects (`SalaryCalculator`) for business logic and query objects (`SalaryMetricsQuery`) for database aggregations. AI was also used to review the Test-Driven Development workflow, suggest edge cases for request and service specs, and improve the overall project structure.
+
+All core implementation—including API design, business logic, tests, and refactoring—was written and validated manually. AI was primarily used as a supporting tool for ideation, review, and improving development efficiency while maintaining production-ready code quality.
 
 ------------------------------------------------------------------------
 
