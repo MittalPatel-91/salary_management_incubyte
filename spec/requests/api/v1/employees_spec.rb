@@ -135,39 +135,53 @@ RSpec.describe "Employees API", type: :request do
 
   # DELETE (DELETE /api/v1/employees/:id)
   describe "DELETE /api/v1/employees/:id" do
-    let!(:employee) { create(:employee) }
+    context "when employee exists" do
+      let!(:employee) { create(:employee) }
 
-    it "deletes the employee" do
-      expect {
-        delete "/api/v1/employees/#{employee.id}"
-      }.to change(Employee, :count).by(-1)
+      it "deletes the employee" do
+        expect {
+          delete "/api/v1/employees/#{employee.id}"
+        }.to change(Employee, :count).by(-1)
 
-      expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:ok)
+      end
     end
 
-    it "returns record not found for non-existent employee" do
-      delete "/api/v1/employees/9999"
+    context "when employee does not exist" do
+      it "returns record not found for non-existent employee" do
+        delete "/api/v1/employees/9999"
 
-      expect(response).to have_http_status(:not_found)
-      body = JSON.parse(response.body)
-      expect(body["error"]).to eq("Employee not found")
+        expect(response).to have_http_status(:not_found)
+        body = JSON.parse(response.body)
+        expect(body["error"]).to eq("Employee not found")
+      end
     end
   end
 
   # SALARY CALCULATION (GET /api/v1/employees/:id/calculate_salary)
   describe "GET /api/v1/employees/:id/calculate_salary" do
-    let!(:employee) { create(:employee, country: "India", salary: 100000) }
+    context "when employee exists" do
+      let!(:employee) { create(:employee, country: "India", salary: 100000) }
 
-    it "returns salary breakdown" do
-      get "/api/v1/employees/#{employee.id}/calculate_salary"
+      it "returns salary breakdown" do
+        get "/api/v1/employees/#{employee.id}/calculate_salary"
 
-      expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:ok)
+        body = JSON.parse(response.body)
+        expect(body["gross_salary"]).to eq(100000)
+        expect(body["tds"]).to eq(10000)
+        expect(body["net_salary"]).to eq(90000)
+      end
+    end
 
-      body = JSON.parse(response.body)
+    context "when employee does not exist" do
+      it "returns record not found for non-existent employee" do
+        get "/api/v1/employees/9999/calculate_salary"
 
-      expect(body["gross_salary"]).to eq(100000)
-      expect(body["tds"]).to eq(10000)
-      expect(body["net_salary"]).to eq(90000)
+        expect(response).to have_http_status(:not_found)
+        body = JSON.parse(response.body)
+        expect(body["error"]).to eq("Employee not found")
+      end
     end
   end
 end
