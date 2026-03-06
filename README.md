@@ -147,6 +147,11 @@ bundle install
 
 Setup database:
 
+Copy the example database configuration:
+``` bash
+cp config/database.example.yml config/database.yml
+```
+
 ``` bash
 rails db:create db:migrate
 ```
