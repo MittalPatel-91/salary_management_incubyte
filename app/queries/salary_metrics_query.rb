@@ -4,7 +4,7 @@ class SalaryMetricsQuery
   end
 
   def by_country(country)
-    scoped = @relation.where(country: country)
+    scoped = @relation.where("LOWER(country) = ?", country.downcase)
 
     {
       minimum_salary: scoped.minimum(:salary)&.to_f,
@@ -14,7 +14,7 @@ class SalaryMetricsQuery
   end
 
   def by_job_title(job_title)
-    scoped = @relation.where(job_title: job_title)
+    scoped = @relation.where("LOWER(job_title) = ?", job_title.downcase)
 
     {
       average_salary: scoped.average(:salary)&.to_f
